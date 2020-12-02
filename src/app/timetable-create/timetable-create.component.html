@@ -1,0 +1,41 @@
+<p>CREATE TIMETABLE</p>
+<div>
+  <input
+    [(ngModel)]="name"
+    type="text"
+    id="nameSched"
+    placeholder="SCHEDULE NAME"
+  />
+  <button (click)="nameSched()">SUBMIT</button>
+</div>
+<div>
+  <input
+    [(ngModel)]="subject"
+    type="text"
+    id="fillDropdown"
+    placeholder="Subject"
+  />
+  <button (click)="populate()">SEARCH CODES</button>
+</div>
+<div>
+  <select #dropdown>
+    <option *ngFor="let x of arr">{{ x }}</option>
+  </select>
+  <button (click)="addCourses(dropdown.value)">ADD TO SCHEDULE</button>
+</div>
+<div>
+  <button (click)="displaySchedule()">DISPLAY SCHEDULE</button>
+</div>
+<div>
+  <button (click)="deleteSchedName()">Delete</button>
+</div>
+<div>
+  <button (click)="displayAllSchedule()">DISPLAY ALL SCHEDULES</button>
+</div>
+<div>
+  <button (click)="deleteAllSchedules()">DELETE ALL SCHEDULES</button>
+</div>
+
+<div id="sDisplay">
+
+</div>

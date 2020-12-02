@@ -1,0 +1,21 @@
+<p>
+  SEARCH TIMETABLE
+</p>
+<button (click) = displaySubjects()>ALL COURSES</button>
+<div>
+  <input [(ngModel)] = "subject" type = "text" id="search" placeholder="SUBJECT">
+</div>
+
+<div>
+  <input [(ngModel)] = "course" type = "text" id="course" placeholder="COURSE CODE">
+  <button (click) = "searchCourseCode()">SUBMIT</button>
+</div>
+
+<div>
+  <input [(ngModel)] = "component" type = "text" id="component" placeholder="COMPONENT">
+  <button (click) = "searchComponent()">SUBMIT</button>
+</div>
+
+<div id="Display">
+
+</div>
