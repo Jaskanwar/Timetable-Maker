@@ -1,5 +1,5 @@
 const express = require("express");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const app = express();
 const port = 3000;
 const router = express.Router();
@@ -33,25 +33,43 @@ app.use("/api", router);
 
 const accessTokenSecret = "jaskanwarRandhawaSecretCode482179";
 const authenticateJWT = (req, res) => {
-  const authHeader = req.headers.Authorization
-  const token = authHeader.split(' ')[1];
-  if(authHeader.exp){
+  const authHeader = req.headers.Authorization;
+  const token = authHeader.split(" ")[1];
+  if (authHeader.exp) {
     console.log("Expired");
   }
-  let verification = jwt.verify(token, accessTokenSecret, (err) =>{
-    if(err){
+  let verification = jwt.verify(token, accessTokenSecret, (err) => {
+    if (err) {
       return 404;
-    }
-    else{
+    } else {
       return 101;
     }
   });
   return verification;
 };
 
-router.post('/login', (req,res) => {
-
-})
+router.post("/login", (req, res) => {
+  const loginData = req.body;
+  let email = req.sanitize(loginData.emailAddy);
+  let passCode = req.sanitize(loginData.pass);
+  for (let i = 0; i < dbUser.getState().users.length; i++) {
+    if (dbUser.getState().users[i].emailLink === email) {
+      if (dbUser.getState().users[i].passwordKey === passCode) {
+        const accessToken = jwt.sign(
+          { emailAddress: email, userPassword: passCode },
+          accessTokenSecret,
+          { expiresIn: "100s" }
+        );
+        res.json({
+          accessToken,
+          message: "success",
+        });
+        return;
+      }
+    }
+  }
+  res.send("Username or password incorrect");
+});
 
 router.get("/", (req, res) => {
   let arr = [];

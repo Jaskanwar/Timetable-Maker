@@ -68,4 +68,7 @@ export class ConfigService {
   deleteAll(info: object){
     return this.post('api/delete/schedules',info,{responseType: 'text'})
   }
+  postLogin(name: String, info:object){
+    return this.post('api/login',info,{responseType: 'text'})
+  }
 }
