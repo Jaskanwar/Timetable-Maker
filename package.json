@@ -23,6 +23,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-sanitizer": "^1.0.5",
+    "jsonwebtoken": "^8.5.1",
     "lowdb": "^1.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ConfigService } from '../Config.service';
+import { Router, RouterModule, Routes, RoutesRecognized } from '@angular/router';
 
 @Component({
   selector: 'app-timetable-home',
@@ -7,11 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TimetableHomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private config: ConfigService, private router: Router) { }
 
   ngOnInit(): void {
   }
 
   email = '';
   password = '';
+
+
 }
