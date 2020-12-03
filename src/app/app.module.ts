@@ -7,9 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { TimetableCreateComponent } from './timetable-create/timetable-create.component';
 import { AppRoutingModule } from './app-routing.module';
 import { TimetableHomeComponent } from './timetable-home/timetable-home.component';
+import { TimetableCreateUserComponent } from './timetable-create-user/timetable-create-user.component';
 
 @NgModule({
-  declarations: [AppComponent, TimtetableSearchComponent, TimetableCreateComponent, TimetableHomeComponent],
+  declarations: [AppComponent, TimtetableSearchComponent, TimetableCreateComponent, TimetableHomeComponent, TimetableCreateUserComponent],
   imports: [BrowserModule, HttpClientModule, FormsModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent],
