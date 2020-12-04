@@ -71,6 +71,22 @@ router.post("/login", (req, res) => {
   res.send("Username or password incorrect");
 });
 
+router.put('/users',(req,res)=>{
+  const userData = req.body;
+  let name = req.sanitize(userData.name)
+  let emailAddress = req.sanitize(userData.emailAddress)
+  let passCode = req.sanitize(userData.passCode)
+  for(let i =0; i<dbUser.getState().users.length; i++){
+      if(dbUser.getState().users[i].emailLink===emailAddress){
+          res.status(404).send("Email Account already exists.")
+          return;
+      }
+  }
+  dbUser.get('users').push({usersName: name, emailLink:emailAddress, passwordKey:passCode}).write();
+  dbUser.update('users').write()
+  res.status(200).send("Success");
+});
+
 router.get("/", (req, res) => {
   let arr = [];
   for (let i = 0; i < data.length; i++) {

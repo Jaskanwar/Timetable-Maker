@@ -1,1 +1,19 @@
-<p>timetable-create-user works!</p>
+<div>
+    <input [(ngModel)] = "firstName" type = "text" id="firstName" placeholder="FIRST NAME">
+  </div>
+  <div>
+    <input [(ngModel)] = "lastName" type = "text" id="lastName" placeholder="LAST NAME">
+  </div>
+  <div>
+    <input [(ngModel)] = "email" type = "email" id="email" placeholder="EMAIL ADDRESS">
+  </div>
+  <div>
+    <input [(ngModel)] = "password" type = "text" id="password" placeholder="PASSWORD">
+  </div>
+ <div>
+     <button (click)= "loadUser()">CREATE USER</button>
+ </div>
+
+<div id = 'display'>
+
+</div>

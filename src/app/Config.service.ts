@@ -71,4 +71,8 @@ export class ConfigService {
   postLogin(name: String, info:object){
     return this.post('api/login',info,{responseType: 'text'})
   }
+  putUser(name: string, info:object)
+  {
+    return this.put('api/users',info,{responseType: 'text'})
+  }
 }

@@ -1,3 +1,9 @@
 {
-  "schedules": []
+  "schedules": [
+    {
+      "scheduleName": "Test",
+      "subject": "applmath",
+      "courseName": "1411B"
+    }
+  ]
 }

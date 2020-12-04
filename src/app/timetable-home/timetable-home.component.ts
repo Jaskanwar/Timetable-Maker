@@ -27,9 +27,6 @@ export class TimetableHomeComponent implements OnInit {
         if (temp.message == 'success') {
           localStorage.setItem('jwt', temp.accessToken);
           this.router.navigate(['createTable']);
-
-          let next = document.getElementById('hideMe');
-          next.removeAttribute('hidden');
         }
       });
   }
