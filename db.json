@@ -9,6 +9,11 @@
       "scheduleName": "test",
       "subject": [],
       "courseName": []
+    },
+    {
+      "scheduleName": "testing",
+      "subject": [],
+      "courseName": []
     }
   ]
 }

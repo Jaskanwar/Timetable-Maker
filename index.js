@@ -27,6 +27,9 @@ app.use(expressSanitizer());
 const cors = require("cors");
 app.use(cors());
 
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 app.use("/", express.static("static"));
 
 app.use("/api", router);
@@ -54,11 +57,17 @@ router.post("/login", (req, res) => {
   let passCode = req.sanitize(loginData.pass);
   for (let i = 0; i < dbUser.getState().users.length; i++) {
     if (dbUser.getState().users[i].emailLink === email) {
-      if (dbUser.getState().users[i].passwordKey === passCode) {
+      //bcrypt.compareSync(someOtherPlaintextPassword, hash);
+      //dbUser.getState().users[i].passwordKey === passCode
+      if (bcrypt.compareSync(passCode, dbUser.getState().users[i].passwordKey)) {
+        if(dbUser.getState().users[i].status ==="deactivated"){
+          res.json({message: "deactivated"})
+          return;
+        }
         const accessToken = jwt.sign(
           { emailAddress: email, userPassword: passCode },
           accessTokenSecret,
-          { expiresIn: "10s" }
+          { expiresIn: "1s" }
         );
         res.json({
           accessToken,
@@ -68,14 +77,14 @@ router.post("/login", (req, res) => {
       }
     }
   }
-  res.send("Username or password incorrect");
+  res.json({message:"Username or password incorrect"});
 });
 
 router.put("/users", (req, res) => {
   const userData = req.body;
   let name = req.sanitize(userData.name);
   let emailAddress = req.sanitize(userData.emailAddress);
-  let passCode = req.sanitize(userData.passCode);
+  let passCode = bcrypt.hashSync(req.sanitize(userData.passCode), saltRounds);
   for (let i = 0; i < dbUser.getState().users.length; i++) {
     if (dbUser.getState().users[i].emailLink === emailAddress) {
       res.status(404).send("Email Account already exists.");
@@ -84,7 +93,7 @@ router.put("/users", (req, res) => {
   }
   dbUser
     .get("users")
-    .push({ usersName: name, emailLink: emailAddress, passwordKey: passCode })
+    .push({ usersName: name, emailLink: emailAddress, passwordKey: passCode, status: "active" })
     .write();
   dbUser.update("users").write();
   res.status(200).send("Success");
@@ -188,6 +197,8 @@ router.put("/schedule/:name/:auth_token", (req, res) => {
       .push({ scheduleName: name, subject: [], courseName: [] })
       .write();
     res.status(200).send();
+  }else{
+    res.json({message: "failed"})
   }
 });
 

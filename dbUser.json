@@ -1,19 +1,16 @@
 {
   "users": [
     {
-      "usersName": "Jas poo",
-      "emailLink": "poo@gmail.com",
-      "passwordKey": "peepoo"
+      "usersName": "test one",
+      "emailLink": "test@gmail.com",
+      "passwordKey": "$2b$10$H1Sq57bDM35gPTAVQocD1eBBx5gRfXpP1o4nQyfknyGM3c3pYQwT6",
+      "status": "deactivated"
     },
     {
-      "usersName": "pee poo",
-      "emailLink": "peepoo@hotmail.com",
-      "passwordKey": "peepoo"
-    },
-    {
-      "usersName": "hi bye",
-      "emailLink": "guy@gmail.com",
-      "passwordKey": "byebye"
+      "usersName": "test two",
+      "emailLink": "test2@gmail.com",
+      "passwordKey": "$2b$10$C07pOcvIS70MeFP3xzCt8OlMrAX.QSqsar1GzKp2Bzy7eer6ySJxS",
+      "status": "active"
     }
   ]
 }

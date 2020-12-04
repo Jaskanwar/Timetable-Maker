@@ -4,10 +4,13 @@
     <input [(ngModel)] = "email" type = "email" id="Email" placeholder="EMAIL">
 </div>
 <div>
-    <input [(ngModel)] = "password" type = "text" id="password" placeholder="PASSWORD">
+    <input [(ngModel)] = "password" type = "password" id="password" placeholder="PASSWORD">
 </div>
 <div>
     <button (click) = "verify()">LOGIN</button>
+</div>
+<div id = 'status'>
+
 </div>
 <nav>
   <a routerLink="createUser">CREATE NEW ACCOUNT</a>

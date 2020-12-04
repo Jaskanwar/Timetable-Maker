@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '../Config.service';
 import { HttpHeaders } from '@angular/common/http';
+import { Router, RouterModule, Routes, RoutesRecognized } from '@angular/router';
 
 @Component({
   selector: 'app-timetable-create',
@@ -18,7 +19,7 @@ export class TimetableCreateComponent implements OnInit {
       Authorization: 'my-auth-token',
     }),
   };
-  constructor(private config: ConfigService) {}
+  constructor(private config: ConfigService, private router: Router) {}
 
   ngOnInit(): void {}
   populate() {
@@ -32,7 +33,11 @@ export class TimetableCreateComponent implements OnInit {
     this.config
       .putScheduleName(this.name,JSON.stringify(authObject), this.info)
       .subscribe((res: any) => {
-        console.log(res);
+        let temp = JSON.parse(res)
+        console.log(temp);
+        if(temp.message == "failed"){
+          this.router.navigate([''])
+        }
       });
   }
   addCourses(courseCode: string) {
