@@ -72,6 +72,10 @@ router.post("/login", (req, res) => {
           accessTokenSecret,
           { expiresIn: "1h" }
         );
+        if(dbUser.getState().users[i].role === "admin"){
+          res.json({accessToken, message: "admin" });
+          return;
+        }
         res.json({
           accessToken,
           message: "success",
@@ -101,6 +105,7 @@ router.put("/users", (req, res) => {
       emailLink: emailAddress,
       passwordKey: passCode,
       status: "active",
+      role: "user"
     })
     .write();
   dbUser.update("users").write();

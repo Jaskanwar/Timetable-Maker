@@ -8,9 +8,10 @@ import { TimetableCreateComponent } from './timetable-create/timetable-create.co
 import { AppRoutingModule } from './app-routing.module';
 import { TimetableHomeComponent } from './timetable-home/timetable-home.component';
 import { TimetableCreateUserComponent } from './timetable-create-user/timetable-create-user.component';
+import { TimetableAdminComponent } from './timetable-admin/timetable-admin.component';
 
 @NgModule({
-  declarations: [AppComponent, TimtetableSearchComponent, TimetableCreateComponent, TimetableHomeComponent, TimetableCreateUserComponent],
+  declarations: [AppComponent, TimtetableSearchComponent, TimetableCreateComponent, TimetableHomeComponent, TimetableCreateUserComponent, TimetableAdminComponent],
   imports: [BrowserModule, HttpClientModule, FormsModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent],

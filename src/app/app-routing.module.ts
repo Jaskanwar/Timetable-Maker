@@ -5,13 +5,14 @@ import { TimetableHomeComponent } from './timetable-home/timetable-home.componen
 import { TimtetableSearchComponent } from './timtetable-Search/timtetable-Search.component';
 import { TimetableCreateComponent } from './timetable-create/timetable-create.component';
 import { TimetableCreateUserComponent } from './timetable-create-user/timetable-create-user.component';
+import { TimetableAdminComponent } from './timetable-admin/timetable-admin.component'
 
 const routes: Routes = [
   { path: '', component: TimetableHomeComponent },
   { path: 'search', component: TimtetableSearchComponent },
   { path: 'createTable', component: TimetableCreateComponent },
-  { path: 'createUser', component: TimetableCreateUserComponent}
-  //{path: 'createUser', component: CreateUserComponent}
+  { path: 'createUser', component: TimetableCreateUserComponent},
+  {path: 'admin', component: TimetableAdminComponent}
 ];
 
 @NgModule({

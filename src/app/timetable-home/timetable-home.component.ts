@@ -41,6 +41,9 @@ export class TimetableHomeComponent implements OnInit {
           this.router.navigate(['createTable']);
         }else if(temp.message == 'deactivated'){
           document.getElementById('status').textContent = "Account has been deactivated contact administrator"
+        }else if(temp.message == 'admin'){
+          localStorage.setItem('jwt', temp.accessToken);
+          this.router.navigate(['admin']);
         }else{
           document.getElementById('status').textContent = "Email or password is incorrect"
         }

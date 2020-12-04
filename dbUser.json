@@ -1,22 +1,18 @@
 {
   "users": [
     {
-      "usersName": "test one",
+      "usersName": "test case",
       "emailLink": "test@gmail.com",
-      "passwordKey": "$2b$10$H1Sq57bDM35gPTAVQocD1eBBx5gRfXpP1o4nQyfknyGM3c3pYQwT6",
-      "status": "deactivated"
+      "passwordKey": "$2b$10$OEhAfkVuj3ESd9vh5Uq.SuiMUZJ6vV/U3KZxqeElYp2xTLkL8/YKi",
+      "status": "active",
+      "role": "user"
     },
     {
-      "usersName": "test two",
-      "emailLink": "test2@gmail.com",
-      "passwordKey": "$2b$10$C07pOcvIS70MeFP3xzCt8OlMrAX.QSqsar1GzKp2Bzy7eer6ySJxS",
-      "status": "active"
-    },
-    {
-      "usersName": "uday poohandler",
-      "emailLink": "udaypoohandler@gmail.com",
-      "passwordKey": "$2b$10$yWwqRwOJFu8jjj/G2MaNMuD7PyFG7sAViizbzLuAFL6WTDVTGgvtC",
-      "status": "active"
+      "usersName": "admin one",
+      "emailLink": "admin@gmail.com",
+      "passwordKey": "$2b$10$twChkNo.Z/VwNSp9Xx0F0uZpB2FJUSrRia/Lvlhp8Un8DQqqYFRjq",
+      "status": "active",
+      "role": "admin"
     }
   ]
 }
