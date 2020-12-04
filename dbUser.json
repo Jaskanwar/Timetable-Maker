@@ -11,6 +11,12 @@
       "emailLink": "test2@gmail.com",
       "passwordKey": "$2b$10$C07pOcvIS70MeFP3xzCt8OlMrAX.QSqsar1GzKp2Bzy7eer6ySJxS",
       "status": "active"
+    },
+    {
+      "usersName": "uday poohandler",
+      "emailLink": "udaypoohandler@gmail.com",
+      "passwordKey": "$2b$10$yWwqRwOJFu8jjj/G2MaNMuD7PyFG7sAViizbzLuAFL6WTDVTGgvtC",
+      "status": "active"
     }
   ]
 }

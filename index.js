@@ -27,7 +27,7 @@ app.use(expressSanitizer());
 const cors = require("cors");
 app.use(cors());
 
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 app.use("/", express.static("static"));
@@ -59,9 +59,11 @@ router.post("/login", (req, res) => {
     if (dbUser.getState().users[i].emailLink === email) {
       //bcrypt.compareSync(someOtherPlaintextPassword, hash);
       //dbUser.getState().users[i].passwordKey === passCode
-      if (bcrypt.compareSync(passCode, dbUser.getState().users[i].passwordKey)) {
-        if(dbUser.getState().users[i].status ==="deactivated"){
-          res.json({message: "deactivated"})
+      if (
+        bcrypt.compareSync(passCode, dbUser.getState().users[i].passwordKey)
+      ) {
+        if (dbUser.getState().users[i].status === "deactivated") {
+          res.json({ message: "deactivated" });
           return;
         }
         const accessToken = jwt.sign(
@@ -77,7 +79,7 @@ router.post("/login", (req, res) => {
       }
     }
   }
-  res.json({message:"Username or password incorrect"});
+  res.json({ message: "Username or password incorrect" });
 });
 
 router.put("/users", (req, res) => {
@@ -93,7 +95,12 @@ router.put("/users", (req, res) => {
   }
   dbUser
     .get("users")
-    .push({ usersName: name, emailLink: emailAddress, passwordKey: passCode, status: "active" })
+    .push({
+      usersName: name,
+      emailLink: emailAddress,
+      passwordKey: passCode,
+      status: "active",
+    })
     .write();
   dbUser.update("users").write();
   res.status(200).send("Success");
@@ -197,8 +204,8 @@ router.put("/schedule/:name/:auth_token", (req, res) => {
       .push({ scheduleName: name, subject: [], courseName: [] })
       .write();
     res.status(200).send();
-  }else{
-    res.json({message: "failed"})
+  } else {
+    res.json({ message: "failed" });
   }
 });
 
@@ -208,11 +215,28 @@ router.put("/write/schedule/:name", (req, res) => {
   const schedule = req.body;
   let subCode = req.sanitize(schedule.subject);
   let courCode = req.sanitize(schedule.catalog_nbr);
+  console.log(subCode);
+  let subject = JSON.parse(`"${subCode}"`);
+  let course = JSON.parse(`"${courCode}"`);
   for (let i = 0; i < db.getState().schedules.length; i++) {
     if (db.getState().schedules[i].scheduleName === name) {
-      db.getState().schedules[i].subject = subCode;
-      db.getState().schedules[i].courseName = courCode;
-      db.update("schedules").write();
+      for (let j = 0; j < db.getState().schedules[i].courseName.length; j++) {
+        if (
+          db.getState().schedules[i].courseName[j].toUpperCase() ===
+            course.toUpperCase() &&
+          db.getState().schedules[i].subject[j].toUpperCase() ===
+            subject.toUpperCase()
+        ) {
+          db.getState().schedules[i].subject = subject;
+          db.getState().schedules[i].courseName = course;
+          db.update("schedules").write();
+          res.status(200).send("Added");
+          return;
+        }
+      }
+      db.getState().schedules[i].courseName.push(course);
+      db.getState().schedules[i].subject.push(subject);
+      db.update("Schedule").write();
       res.status(200).send("Added");
       return;
     }
@@ -224,13 +248,25 @@ router.put("/write/schedule/:name", (req, res) => {
 router.get("/display/schedule/:name", (req, res) => {
   let name = req.sanitize(req.params.name);
   console.log(name);
-  let dispSchedule = "";
+  let dispSchedule = [];
   for (let i = 0; i < db.getState().schedules.length; i++) {
     if (db.getState().schedules[i].scheduleName === name) {
-      let dispsubject = db.getState().schedules[i].subject;
-      let dispCourse = db.getState().schedules[i].courseName;
-      dispSchedule += dispsubject + ":" + dispCourse + " ";
-      console.log(dispSchedule);
+      for (let j = 0; j < db.getState().schedules[i].courseName.length; j++) {
+        let dispsubject = db.getState().schedules[i].subject[j];
+        let dispCourse = db.getState().schedules[i].courseName[j];
+        const course = data.filter(
+          (a) =>
+            a.subject.toString().toLowerCase() ===
+            req.sanitize(dispsubject.toString().toLowerCase())
+        );
+        const final = course.filter(
+          (a) =>
+            a.catalog_nbr.toString().toUpperCase() ===
+            req.sanitize(dispCourse.toString().toUpperCase())
+        );
+        dispSchedule.push(final);
+
+      }
       res.send(JSON.stringify(dispSchedule));
       return;
     }
