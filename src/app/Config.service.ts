@@ -50,8 +50,8 @@ export class ConfigService {
   getComponentCodes(subject: string, code: string, comp: string){
     return this.get('api/timetable/'+subject+"/"+code+"/"+comp);
   }
-  putScheduleName(name: string, info: object){
-    return this.put('api/schedule/'+name,info, {responseType: 'text'});
+  putScheduleName(name: string, auth: string, info: object){
+    return this.put('api/schedule/'+name+'/'+auth,info, {responseType: 'text'});
   }
   putPairs(name: string, info: object, options){
     return this.put('api/write/schedule/'+name, info, {responseType: 'text'});

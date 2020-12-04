@@ -4,6 +4,11 @@
       "scheduleName": "Test",
       "subject": "applmath",
       "courseName": "1411B"
+    },
+    {
+      "scheduleName": "test",
+      "subject": [],
+      "courseName": []
     }
   ]
 }

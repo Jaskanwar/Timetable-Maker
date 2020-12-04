@@ -28,8 +28,9 @@ export class TimetableCreateComponent implements OnInit {
     });
   }
   nameSched() {
+    let authObject = {headers: {Authorization: "Bearer " + localStorage.getItem("jwt")}}
     this.config
-      .putScheduleName(this.name, this.info)
+      .putScheduleName(this.name,JSON.stringify(authObject), this.info)
       .subscribe((res: any) => {
         console.log(res);
       });

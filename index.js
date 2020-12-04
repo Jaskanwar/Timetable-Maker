@@ -58,7 +58,7 @@ router.post("/login", (req, res) => {
         const accessToken = jwt.sign(
           { emailAddress: email, userPassword: passCode },
           accessTokenSecret,
-          { expiresIn: "100s" }
+          { expiresIn: "10s" }
         );
         res.json({
           accessToken,
@@ -71,19 +71,22 @@ router.post("/login", (req, res) => {
   res.send("Username or password incorrect");
 });
 
-router.put('/users',(req,res)=>{
+router.put("/users", (req, res) => {
   const userData = req.body;
-  let name = req.sanitize(userData.name)
-  let emailAddress = req.sanitize(userData.emailAddress)
-  let passCode = req.sanitize(userData.passCode)
-  for(let i =0; i<dbUser.getState().users.length; i++){
-      if(dbUser.getState().users[i].emailLink===emailAddress){
-          res.status(404).send("Email Account already exists.")
-          return;
-      }
+  let name = req.sanitize(userData.name);
+  let emailAddress = req.sanitize(userData.emailAddress);
+  let passCode = req.sanitize(userData.passCode);
+  for (let i = 0; i < dbUser.getState().users.length; i++) {
+    if (dbUser.getState().users[i].emailLink === emailAddress) {
+      res.status(404).send("Email Account already exists.");
+      return;
+    }
   }
-  dbUser.get('users').push({usersName: name, emailLink:emailAddress, passwordKey:passCode}).write();
-  dbUser.update('users').write()
+  dbUser
+    .get("users")
+    .push({ usersName: name, emailLink: emailAddress, passwordKey: passCode })
+    .write();
+  dbUser.update("users").write();
   res.status(200).send("Success");
 });
 
@@ -169,18 +172,23 @@ router.get(
 );
 
 //Task 4
-router.put("/schedule/:name", (req, res) => {
-  const name = req.sanitize(req.params.name);
-  for (let i = 0; i < db.getState().schedules.length; i++) {
-    if (db.getState().schedules[i].scheduleName === name) {
-      res.status(404).send("Name already exists.");
-      return;
+router.put("/schedule/:name/:auth_token", (req, res) => {
+  const token = req.sanitize(req.params.auth_token);
+  const jsonToken = JSON.parse(token);
+  console.log(authenticateJWT(jsonToken));
+  if (authenticateJWT(jsonToken) == 101) {
+    const name = req.sanitize(req.params.name);
+    for (let i = 0; i < db.getState().schedules.length; i++) {
+      if (db.getState().schedules[i].scheduleName === name) {
+        res.status(404).send("Name already exists.");
+        return;
+      }
     }
+    db.get("schedules")
+      .push({ scheduleName: name, subject: [], courseName: [] })
+      .write();
+    res.status(200).send();
   }
-  db.get("schedules")
-    .push({ scheduleName: name, subject: [], courseName: [] })
-    .write();
-  res.status(200).send();
 });
 
 //Task 5
