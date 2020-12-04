@@ -16,8 +16,20 @@ export class TimetableHomeComponent implements OnInit {
 
   email = '';
   password = '';
-
   verify() {
+    let mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    if(this.email ==""){
+      document.getElementById('status').textContent = "Enter in Email"
+      return;
+    }else if(this.password ==""){
+      document.getElementById('status').textContent = "Enter in password"
+      return;
+    }
+    if(!(this.email.match(mailformat))){
+      document.getElementById('status').textContent = "invalid email"
+      return;
+    }
+
     this.config
       .postLogin('/login', { emailAddy: this.email, pass: this.password })
       .subscribe((res: any) => {

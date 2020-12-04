@@ -29,6 +29,7 @@ app.use(cors());
 
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+const jwt_decode = require('jwt-decode');
 
 app.use("/", express.static("static"));
 
@@ -69,7 +70,7 @@ router.post("/login", (req, res) => {
         const accessToken = jwt.sign(
           { emailAddress: email, userPassword: passCode },
           accessTokenSecret,
-          { expiresIn: "1s" }
+          { expiresIn: "1h" }
         );
         res.json({
           accessToken,
@@ -191,6 +192,7 @@ router.get(
 router.put("/schedule/:name/:auth_token", (req, res) => {
   const token = req.sanitize(req.params.auth_token);
   const jsonToken = JSON.parse(token);
+  let decode = jwt_decode(token);
   console.log(authenticateJWT(jsonToken));
   if (authenticateJWT(jsonToken) == 101) {
     const name = req.sanitize(req.params.name);
@@ -201,7 +203,7 @@ router.put("/schedule/:name/:auth_token", (req, res) => {
       }
     }
     db.get("schedules")
-      .push({ scheduleName: name, subject: [], courseName: [] })
+      .push({ scheduleName: name, subject: [], courseName: [], user: decode.emailAddress})
       .write();
     res.status(200).send();
   } else {
@@ -265,7 +267,6 @@ router.get("/display/schedule/:name", (req, res) => {
             req.sanitize(dispCourse.toString().toUpperCase())
         );
         dispSchedule.push(final);
-
       }
       res.send(JSON.stringify(dispSchedule));
       return;

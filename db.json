@@ -1,25 +1,10 @@
 {
   "schedules": [
     {
-      "scheduleName": "Test",
-      "subject": "applmath",
-      "courseName": "1411B"
-    },
-    {
       "scheduleName": "test",
-      "subject": [
-        "applmath",
-        "applmath"
-      ],
-      "courseName": [
-        "1201B",
-        "1411B"
-      ]
-    },
-    {
-      "scheduleName": "testing",
       "subject": [],
-      "courseName": []
+      "courseName": [],
+      "user": "test2@gmail.com"
     }
   ]
 }
