@@ -4,27 +4,49 @@ import { ConfigService } from '../Config.service';
 @Component({
   selector: 'app-timetable-admin',
   templateUrl: './timetable-admin.component.html',
-  styleUrls: ['./timetable-admin.component.css']
+  styleUrls: ['./timetable-admin.component.css'],
 })
 export class TimetableAdminComponent implements OnInit {
+  constructor(private config: ConfigService) {}
 
-  constructor(private config: ConfigService) { }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
   userList = [];
   info = {};
-  fillUsers(){
-    let authObject = {headers: {Authorization: "Bearer " + localStorage.getItem("jwt")}}
-    this.config.getUserList(JSON.stringify(authObject)).subscribe((res: any) =>{
-      this.userList = res;
-    })
+  fillUsers() {
+    let authObject = {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
+    };
+    this.config
+      .getUserList(JSON.stringify(authObject))
+      .subscribe((res: any) => {
+        this.userList = res;
+      });
   }
-  makeAdmin(user: string){
-    console.log("poopoo")
-    let authObject = {headers: {Authorization: "Bearer " + localStorage.getItem("jwt")}}
-    this.config.postMakeAdmin(user, JSON.stringify(authObject),this.info).subscribe((res: any) =>{
-
-    })
+  makeAdmin(user: string) {
+    console.log('poopoo');
+    let authObject = {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
+    };
+    this.config
+      .postMakeAdmin(user, JSON.stringify(authObject), this.info)
+      .subscribe((res: any) => {});
+  }
+  deactivateUser(user: string) {
+    console.log('poopoo');
+    let authObject = {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
+    };
+    this.config
+      .postDeactivate(user, JSON.stringify(authObject), this.info)
+      .subscribe((res: any) => {});
+  }
+  activateUser(user: string) {
+    console.log('poopoo');
+    let authObject = {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
+    };
+    this.config
+      .postActivate(user, JSON.stringify(authObject), this.info)
+      .subscribe((res: any) => {});
   }
 }

@@ -79,7 +79,12 @@ export class ConfigService {
     return this.get('api/fill/users/'+auth);
   }
   postMakeAdmin(name: String, auth: string, info:object){
-    console.log(name);
     return this.post('api/admin/'+name+'/'+auth, info, {responseType: 'text'})
+  }
+  postDeactivate(name: String, auth: string, info:object){
+    return this.post('api/deactivate/'+name+'/'+auth, info, {responseType: 'text'})
+  }
+  postActivate(name: String, auth: string, info:object){
+    return this.post('api/activate/'+name+'/'+auth, info, {responseType: 'text'})
   }
 }

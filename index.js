@@ -349,6 +349,42 @@ router.post("/admin/:user/:auth_token", (req, res) =>{
   }
 })
 
+router.post("/deactivate/:user/:auth_token", (req, res) =>{
+  console.log("poopoo");
+  const token = req.sanitize(req.params.auth_token);
+  const jsonToken = JSON.parse(token);
+  let userEmail = req.sanitize(req.params.user);
+  if (authenticateJWT(jsonToken) == 101) {
+    for(let i = 0; i < dbUser.getState().users.length; i++){
+      if(dbUser.getState().users[i].emailLink ===userEmail){
+        dbUser.getState().users[i].status = "deactivated";
+        dbUser.update("users").write();
+      }
+    }
+    res.send("done");
+  } else {
+    res.json({ message: "failed" });
+  }
+})
+
+router.post("/activate/:user/:auth_token", (req, res) =>{
+  console.log("poopoo");
+  const token = req.sanitize(req.params.auth_token);
+  const jsonToken = JSON.parse(token);
+  let userEmail = req.sanitize(req.params.user);
+  if (authenticateJWT(jsonToken) == 101) {
+    for(let i = 0; i < dbUser.getState().users.length; i++){
+      if(dbUser.getState().users[i].emailLink ===userEmail){
+        dbUser.getState().users[i].status = "active";
+        dbUser.update("users").write();
+      }
+    }
+    res.send("done");
+  } else {
+    res.json({ message: "failed" });
+  }
+})
+
 app.listen(port, () => {
   console.log("Listening on port" + port);
 });
