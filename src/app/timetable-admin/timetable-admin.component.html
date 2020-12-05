@@ -1,1 +1,5 @@
-<p>timetable-admin works!</p>
+<p>ADMIN PAGE</p>
+<button (click)="fillUsers()">GET USERS</button>
+<select #dropdown>
+    <option *ngFor = "let x of userList">{{x}}</option>
+</select>

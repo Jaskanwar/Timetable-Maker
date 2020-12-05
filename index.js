@@ -314,6 +314,23 @@ router.post("/delete/schedules", (req, res) => {
   }
 });
 
+router.get("/fill/users/:auth_token",(req, res) =>{
+  const token = req.sanitize(req.params.auth_token);
+  const jsonToken = JSON.parse(token);
+  console.log("poopoo");
+  if (authenticateJWT(jsonToken) == 101) {
+    let userList = [];
+    for(let i = 0; i < dbUser.getState().users.length; i++){
+      if(dbUser.getState().users[i].role ==="user"){
+        userList.push(dbUser.getState().users[i].emailLink);
+      }
+    }
+    res.send(userList);
+  } else {
+    res.json({ message: "failed" });
+  }
+})
+
 app.listen(port, () => {
   console.log("Listening on port" + port);
 });

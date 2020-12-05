@@ -75,4 +75,7 @@ export class ConfigService {
   {
     return this.put('api/users',info,{responseType: 'text'})
   }
+  getUserList(auth: string){
+    return this.get('api/fill/users/'+auth);
+  }
 }

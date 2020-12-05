@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ConfigService } from '../Config.service';
 
 @Component({
   selector: 'app-timetable-admin',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TimetableAdminComponent implements OnInit {
 
-  constructor() { }
+  constructor(private config: ConfigService) { }
 
   ngOnInit(): void {
   }
-
+  userList = [];
+  fillUsers(){
+    console.log("poopoo")
+    let authObject = {headers: {Authorization: "Bearer " + localStorage.getItem("jwt")}}
+    this.config.getUserList(JSON.stringify(authObject)).subscribe((res: any) =>{
+      this.userList = res;
+    })
+  }
 }
