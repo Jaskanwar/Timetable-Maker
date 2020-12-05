@@ -1,5 +1,12 @@
 <p>CREATE TIMETABLE</p>
 <div>
+  <input [(ngModel)] = "email" type = "email" id="Email" placeholder="EMAIL">
+  <input [(ngModel)] = "password" type = "password" id="password" placeholder="PASSWORD">
+  <input [(ngModel)] = "newpassword" type = "password" id="newpassword" placeholder="NEW PASSWORD">
+  <button (click) = "changePassword()">CHANGE PASSWORD</button>
+</div>
+
+<div>
   <input
     [(ngModel)]="name"
     type="text"

@@ -90,4 +90,7 @@ export class ConfigService {
   getKeywordSearch(keyword: string){
     return this.get('api/keyword/'+keyword)
   }
+  postNewPassword(email: string, password: string, auth: string, info: object){
+    return this.post('api/change/'+email+'/'+password+'/'+auth,info,{responseType: 'text'});
+  }
 }

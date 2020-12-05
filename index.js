@@ -30,7 +30,7 @@ app.use(cors());
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const jwt_decode = require("jwt-decode");
-var stringSimilarity = require('string-similarity');
+var stringSimilarity = require("string-similarity");
 
 app.use("/", express.static("static"));
 
@@ -392,20 +392,53 @@ router.post("/activate/:user/:auth_token", (req, res) => {
   }
 });
 
-router.get("/keyword/:keyword",(req,res) =>{
+router.get("/keyword/:keyword", (req, res) => {
   let keyword = req.sanitize(req.params.keyword);
   let arr = [];
-  for(let i = 0; i < data.length; i++){
-    if(stringSimilarity.compareTwoStrings(keyword.toUpperCase(), JSON.stringify(data[i].className)) > 0.60){
+  for (let i = 0; i < data.length; i++) {
+    if (
+      stringSimilarity.compareTwoStrings(
+        keyword.toUpperCase(),
+        JSON.stringify(data[i].className)
+      ) > 0.6
+    ) {
       arr.push(data[i]);
     }
-    if(stringSimilarity.compareTwoStrings(keyword.toUpperCase(), JSON.stringify(data[i].catalog_nbr)) > 0.44){
-      arr.push(data[i])
+    if (
+      stringSimilarity.compareTwoStrings(
+        keyword.toUpperCase(),
+        JSON.stringify(data[i].catalog_nbr)
+      ) > 0.44
+    ) {
+      arr.push(data[i]);
     }
   }
   console.log(arr);
   res.send(arr);
-})
+});
+
+router.post("/change/:email/:password/:auth_token", (req, res) => {
+  console.log("poopoo")
+  const token = req.sanitize(req.params.auth_token);
+  const jsonToken = JSON.parse(token);
+  if (authenticateJWT(jsonToken) == 101) {
+    let email = req.sanitize(req.params.email);
+    let password = req.sanitize(req.params.password);
+    let body = req.body;
+    let newpassword = body.password;
+    for (let i = 0; i < dbUser.getState().users.length; i++) {
+      if (dbUser.getState().users[i].emailLink === email) {
+        if (bcrypt.compareSync(password, dbUser.getState().users[i].passwordKey)) {
+          dbUser.getState().users[i].passwordKey = bcrypt.hashSync(newpassword, saltRounds);;
+          dbUser.update("Users").write();
+          return;
+        }
+      }
+    }
+  } else {
+    res.json({ message: "failed" });
+  }
+});
 
 app.listen(port, () => {
   console.log("Listening on port" + port);

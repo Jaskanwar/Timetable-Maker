@@ -11,6 +11,9 @@ import { Router, RouterModule, Routes, RoutesRecognized } from '@angular/router'
 export class TimetableCreateComponent implements OnInit {
   name = '';
   subject = '';
+  email = '';
+  password = '';
+  newpassword = '';
   arr;
   info = {};
   httpOptions = {
@@ -68,5 +71,12 @@ export class TimetableCreateComponent implements OnInit {
   }
   deleteAllSchedules(){
     this.config.deleteAll(this.info).subscribe();
+  }
+
+  changePassword(){
+    let authObject = {headers: {Authorization: "Bearer " + localStorage.getItem("jwt")}}
+    this.config.postNewPassword(this.email, this.password, JSON.stringify(authObject), {password: this.newpassword}).subscribe((res: any) =>{
+
+    })
   }
 }
