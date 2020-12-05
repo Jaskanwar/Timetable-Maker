@@ -5,7 +5,7 @@
       "emailLink": "test@gmail.com",
       "passwordKey": "$2b$10$OEhAfkVuj3ESd9vh5Uq.SuiMUZJ6vV/U3KZxqeElYp2xTLkL8/YKi",
       "status": "active",
-      "role": "user"
+      "role": "admin"
     },
     {
       "usersName": "admin one",

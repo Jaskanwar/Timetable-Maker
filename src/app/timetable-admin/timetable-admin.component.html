@@ -3,3 +3,6 @@
 <select #dropdown>
     <option *ngFor = "let x of userList">{{x}}</option>
 </select>
+<div>
+  <button (click)="makeAdmin(dropdown.value)">MAKE ADMIN</button>
+</div>

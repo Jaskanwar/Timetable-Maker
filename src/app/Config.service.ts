@@ -78,4 +78,8 @@ export class ConfigService {
   getUserList(auth: string){
     return this.get('api/fill/users/'+auth);
   }
+  postMakeAdmin(name: String, auth: string, info:object){
+    console.log(name);
+    return this.post('api/admin/'+name+'/'+auth, info, {responseType: 'text'})
+  }
 }
