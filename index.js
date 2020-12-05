@@ -29,7 +29,8 @@ app.use(cors());
 
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-const jwt_decode = require('jwt-decode');
+const jwt_decode = require("jwt-decode");
+var stringSimilarity = require('string-similarity');
 
 app.use("/", express.static("static"));
 
@@ -72,8 +73,8 @@ router.post("/login", (req, res) => {
           accessTokenSecret,
           { expiresIn: "1h" }
         );
-        if(dbUser.getState().users[i].role === "admin"){
-          res.json({accessToken, message: "admin" });
+        if (dbUser.getState().users[i].role === "admin") {
+          res.json({ accessToken, message: "admin" });
           return;
         }
         res.json({
@@ -105,7 +106,7 @@ router.put("/users", (req, res) => {
       emailLink: emailAddress,
       passwordKey: passCode,
       status: "active",
-      role: "user"
+      role: "user",
     })
     .write();
   dbUser.update("users").write();
@@ -167,10 +168,11 @@ router.get(
         c.subject.toString().toUpperCase() ===
         req.sanitize(req.params.classes_subjects.toString().toUpperCase())
     );
-    const course_code = subjects.filter(
-      (c) =>
-        c.catalog_nbr.toString().toUpperCase() ===
-        req.sanitize(req.params.course_code.toString().toUpperCase())
+    const course_code = subjects.filter((c) =>
+      c.catalog_nbr
+        .toString()
+        .toUpperCase()
+        .includes(req.sanitize(req.params.course_code.toString().toUpperCase()))
     );
     if (subjects.length === 0 || course_code.length === 0) {
       res
@@ -208,7 +210,12 @@ router.put("/schedule/:name/:auth_token", (req, res) => {
       }
     }
     db.get("schedules")
-      .push({ scheduleName: name, subject: [], courseName: [], user: decode.emailAddress})
+      .push({
+        scheduleName: name,
+        subject: [],
+        courseName: [],
+        user: decode.emailAddress,
+      })
       .write();
     res.status(200).send();
   } else {
@@ -314,14 +321,14 @@ router.post("/delete/schedules", (req, res) => {
   }
 });
 
-router.get("/fill/users/:auth_token",(req, res) =>{
+router.get("/fill/users/:auth_token", (req, res) => {
   const token = req.sanitize(req.params.auth_token);
   const jsonToken = JSON.parse(token);
   console.log("poopoo");
   if (authenticateJWT(jsonToken) == 101) {
     let userList = [];
-    for(let i = 0; i < dbUser.getState().users.length; i++){
-      if(dbUser.getState().users[i].role ==="user"){
+    for (let i = 0; i < dbUser.getState().users.length; i++) {
+      if (dbUser.getState().users[i].role === "user") {
         userList.push(dbUser.getState().users[i].emailLink);
       }
     }
@@ -329,16 +336,16 @@ router.get("/fill/users/:auth_token",(req, res) =>{
   } else {
     res.json({ message: "failed" });
   }
-})
+});
 
-router.post("/admin/:user/:auth_token", (req, res) =>{
+router.post("/admin/:user/:auth_token", (req, res) => {
   console.log("poopoo");
   const token = req.sanitize(req.params.auth_token);
   const jsonToken = JSON.parse(token);
   let userEmail = req.sanitize(req.params.user);
   if (authenticateJWT(jsonToken) == 101) {
-    for(let i = 0; i < dbUser.getState().users.length; i++){
-      if(dbUser.getState().users[i].emailLink ===userEmail){
+    for (let i = 0; i < dbUser.getState().users.length; i++) {
+      if (dbUser.getState().users[i].emailLink === userEmail) {
         dbUser.getState().users[i].role = "admin";
         dbUser.update("users").write();
       }
@@ -347,16 +354,16 @@ router.post("/admin/:user/:auth_token", (req, res) =>{
   } else {
     res.json({ message: "failed" });
   }
-})
+});
 
-router.post("/deactivate/:user/:auth_token", (req, res) =>{
+router.post("/deactivate/:user/:auth_token", (req, res) => {
   console.log("poopoo");
   const token = req.sanitize(req.params.auth_token);
   const jsonToken = JSON.parse(token);
   let userEmail = req.sanitize(req.params.user);
   if (authenticateJWT(jsonToken) == 101) {
-    for(let i = 0; i < dbUser.getState().users.length; i++){
-      if(dbUser.getState().users[i].emailLink ===userEmail){
+    for (let i = 0; i < dbUser.getState().users.length; i++) {
+      if (dbUser.getState().users[i].emailLink === userEmail) {
         dbUser.getState().users[i].status = "deactivated";
         dbUser.update("users").write();
       }
@@ -365,16 +372,16 @@ router.post("/deactivate/:user/:auth_token", (req, res) =>{
   } else {
     res.json({ message: "failed" });
   }
-})
+});
 
-router.post("/activate/:user/:auth_token", (req, res) =>{
+router.post("/activate/:user/:auth_token", (req, res) => {
   console.log("poopoo");
   const token = req.sanitize(req.params.auth_token);
   const jsonToken = JSON.parse(token);
   let userEmail = req.sanitize(req.params.user);
   if (authenticateJWT(jsonToken) == 101) {
-    for(let i = 0; i < dbUser.getState().users.length; i++){
-      if(dbUser.getState().users[i].emailLink ===userEmail){
+    for (let i = 0; i < dbUser.getState().users.length; i++) {
+      if (dbUser.getState().users[i].emailLink === userEmail) {
         dbUser.getState().users[i].status = "active";
         dbUser.update("users").write();
       }
@@ -383,6 +390,21 @@ router.post("/activate/:user/:auth_token", (req, res) =>{
   } else {
     res.json({ message: "failed" });
   }
+});
+
+router.get("/keyword/:keyword",(req,res) =>{
+  let keyword = req.sanitize(req.params.keyword);
+  let arr = [];
+  for(let i = 0; i < data.length; i++){
+    if(stringSimilarity.compareTwoStrings(keyword.toUpperCase(), JSON.stringify(data[i].className)) > 0.60){
+      arr.push(data[i]);
+    }
+    if(stringSimilarity.compareTwoStrings(keyword.toUpperCase(), JSON.stringify(data[i].catalog_nbr)) > 0.44){
+      arr.push(data[i])
+    }
+  }
+  console.log(arr);
+  res.send(arr);
 })
 
 app.listen(port, () => {

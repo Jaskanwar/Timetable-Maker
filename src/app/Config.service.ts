@@ -87,4 +87,7 @@ export class ConfigService {
   postActivate(name: String, auth: string, info:object){
     return this.post('api/activate/'+name+'/'+auth, info, {responseType: 'text'})
   }
+  getKeywordSearch(keyword: string){
+    return this.get('api/keyword/'+keyword)
+  }
 }

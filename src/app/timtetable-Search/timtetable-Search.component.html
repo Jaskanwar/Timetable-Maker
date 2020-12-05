@@ -16,6 +16,16 @@
   <button (click) = "searchComponent()">SUBMIT</button>
 </div>
 
-<div id="Display">
+<div>
+  <p>Search by Keyowrd</p>
+  <input [(ngModel)] = "keyword" type = "text" id="keyword" placeholder="keyword">
+  <button (click) = "keywordSearch()">Search</button>
+</div>
 
+<div id="Display">
+  <p id = "subject"></p>
+  <p id = "catalog_nbr"></p>
+  <p id = "className"></p>
+  <p id = "class_section"></p>
+  <p id = "ssr_component"></p>
 </div>
