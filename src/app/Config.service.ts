@@ -53,20 +53,20 @@ export class ConfigService {
   putScheduleName(name: string, auth: string, info: object){
     return this.put('api/schedule/'+name+'/'+auth,info, {responseType: 'text'});
   }
-  putPairs(name: string, info: object, options){
-    return this.put('api/write/schedule/'+name, info, {responseType: 'text'});
+  putPairs(name: string,auth: string, info: object, options){
+    return this.put('api/write/schedule/'+name+'/'+auth, info, {responseType: 'text'});
   }
-  getpairs(name: string){
-    return this.get('api/display/schedule/'+ name);
+  getpairs(name: string,auth: string){
+    return this.get('api/display/schedule/'+ name+'/'+auth);
   }
-  deleteName(name: string, info: object){
-    return this.post('api/schedule/'+name, info, {responseType: 'text'});
+  deleteName(name: string,auth: string, info: object){
+    return this.post('api/schedule/'+name+'/'+auth, info, {responseType: 'text'});
   }
-  displayAllSchedules(){
-    return this.get('api/disp/schedule');
+  displayAllSchedules(auth: string){
+    return this.get('api/disp/schedule'+'/'+auth);
   }
-  deleteAll(info: object){
-    return this.post('api/delete/schedules',info,{responseType: 'text'})
+  deleteAll(auth: string,info: object){
+    return this.post('api/delete/schedules'+'/'+auth,info,{responseType: 'text'})
   }
   postLogin(name: String, info:object){
     return this.post('api/login',info,{responseType: 'text'})

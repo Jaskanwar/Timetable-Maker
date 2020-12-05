@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '../Config.service';
 import { HttpHeaders } from '@angular/common/http';
-import { Router, RouterModule, Routes, RoutesRecognized } from '@angular/router';
+import {
+  Router,
+  RouterModule,
+  Routes,
+  RoutesRecognized,
+} from '@angular/router';
 
 @Component({
   selector: 'app-timetable-create',
@@ -32,51 +37,108 @@ export class TimetableCreateComponent implements OnInit {
     });
   }
   nameSched() {
-    let authObject = {headers: {Authorization: "Bearer " + localStorage.getItem("jwt")}}
+    let authObject = {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
+    };
     this.config
-      .putScheduleName(this.name,JSON.stringify(authObject), this.info)
+      .putScheduleName(this.name, JSON.stringify(authObject), this.info)
       .subscribe((res: any) => {
-        let temp = JSON.parse(res)
+        let temp = JSON.parse(res);
         console.log(temp);
-        if(temp.message == "failed"){
-          this.router.navigate([''])
+        if (temp.message == 'failed') {
+          this.router.navigate(['']);
         }
       });
   }
   addCourses(courseCode: string) {
+    let authObject = {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
+    };
     this.config
       .putPairs(
         this.name,
+        JSON.stringify(authObject),
         { subject: this.subject, catalog_nbr: courseCode },
         this.httpOptions
       )
-      .subscribe((res: any) => {});
+      .subscribe((res: any) => {
+        let temp = JSON.parse(res);
+        if (temp.message == 'failed') {
+          this.router.navigate(['']);
+        }
+      });
   }
   displaySchedule() {
-    this.config.getpairs(this.name.toString()).subscribe((res: any) => {
-      document.getElementById('sDisplay').textContent = `Schedule: ${
-        this.name
-      } Classes: ${JSON.stringify(res)}`;
-    });
+    let authObject = {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
+    };
+    this.config
+      .getpairs(this.name.toString(), JSON.stringify(authObject))
+      .subscribe((res: any) => {
+        document.getElementById('sDisplay').textContent = `Schedule: ${
+          this.name
+        } Classes: ${JSON.stringify(res)}`;
+        let temp = JSON.parse(res);
+        if (temp.message == 'failed') {
+          this.router.navigate(['']);
+        }
+      });
   }
   deleteSchedName() {
-    this.config.deleteName(this.name, this.info).subscribe((res: any) => {
-      console.log(res);
-    });
+    let authObject = {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
+    };
+    this.config
+      .deleteName(this.name, JSON.stringify(authObject), this.info)
+      .subscribe((res: any) => {
+        console.log(res);
+        let temp = JSON.parse(res);
+        if (temp.message == 'failed') {
+          this.router.navigate(['']);
+        }
+      });
   }
-  displayAllSchedule(){
-    this.config.displayAllSchedules().subscribe((res: any) => {
-      document.getElementById("sDisplay").textContent = JSON.stringify(res)
-    });
+  displayAllSchedule() {
+    let authObject = {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
+    };
+    this.config
+      .displayAllSchedules(JSON.stringify(authObject))
+      .subscribe((res: any) => {
+        document.getElementById('sDisplay').textContent = JSON.stringify(res);
+        let temp = JSON.parse(res);
+        if (temp.message == 'failed') {
+          this.router.navigate(['']);
+        }
+      });
   }
-  deleteAllSchedules(){
-    this.config.deleteAll(this.info).subscribe();
+  deleteAllSchedules() {
+    let authObject = {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
+    };
+    this.config
+      .deleteAll(JSON.stringify(authObject), this.info)
+      .subscribe((res: any) => {
+        let temp = JSON.parse(res);
+        if (temp.message == 'failed') {
+          this.router.navigate(['']);
+        }
+      });
   }
 
-  changePassword(){
-    let authObject = {headers: {Authorization: "Bearer " + localStorage.getItem("jwt")}}
-    this.config.postNewPassword(this.email, this.password, JSON.stringify(authObject), {password: this.newpassword}).subscribe((res: any) =>{
-
-    })
+  changePassword() {
+    let authObject = {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
+    };
+    this.config
+      .postNewPassword(this.email, this.password, JSON.stringify(authObject), {
+        password: this.newpassword,
+      })
+      .subscribe((res: any) => {
+        let temp = JSON.parse(res);
+        if (temp.message == 'failed') {
+          this.router.navigate(['']);
+        }
+      });
   }
 }

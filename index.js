@@ -224,100 +224,130 @@ router.put("/schedule/:name/:auth_token", (req, res) => {
 });
 
 //Task 5
-router.put("/write/schedule/:name", (req, res) => {
-  const name = req.sanitize(req.params.name);
-  const schedule = req.body;
-  let subCode = req.sanitize(schedule.subject);
-  let courCode = req.sanitize(schedule.catalog_nbr);
-  console.log(subCode);
-  let subject = JSON.parse(`"${subCode}"`);
-  let course = JSON.parse(`"${courCode}"`);
-  for (let i = 0; i < db.getState().schedules.length; i++) {
-    if (db.getState().schedules[i].scheduleName === name) {
-      for (let j = 0; j < db.getState().schedules[i].courseName.length; j++) {
-        if (
-          db.getState().schedules[i].courseName[j].toUpperCase() ===
-            course.toUpperCase() &&
-          db.getState().schedules[i].subject[j].toUpperCase() ===
-            subject.toUpperCase()
-        ) {
-          db.getState().schedules[i].subject = subject;
-          db.getState().schedules[i].courseName = course;
-          db.update("schedules").write();
-          res.status(200).send("Added");
-          return;
+router.put("/write/schedule/:name/:auth_token", (req, res) => {
+  const token = req.sanitize(req.params.auth_token);
+  const jsonToken = JSON.parse(token);
+  if (authenticateJWT(jsonToken) == 101) {
+    const name = req.sanitize(req.params.name);
+    const schedule = req.body;
+    let subCode = req.sanitize(schedule.subject);
+    let courCode = req.sanitize(schedule.catalog_nbr);
+    console.log(subCode);
+    let subject = JSON.parse(`"${subCode}"`);
+    let course = JSON.parse(`"${courCode}"`);
+    for (let i = 0; i < db.getState().schedules.length; i++) {
+      if (db.getState().schedules[i].scheduleName === name) {
+        for (let j = 0; j < db.getState().schedules[i].courseName.length; j++) {
+          if (
+            db.getState().schedules[i].courseName[j].toUpperCase() ===
+              course.toUpperCase() &&
+            db.getState().schedules[i].subject[j].toUpperCase() ===
+              subject.toUpperCase()
+          ) {
+            db.getState().schedules[i].subject = subject;
+            db.getState().schedules[i].courseName = course;
+            db.update("schedules").write();
+            res.status(200).send("Added");
+            return;
+          }
         }
+        db.getState().schedules[i].courseName.push(course);
+        db.getState().schedules[i].subject.push(subject);
+        db.update("Schedule").write();
+        res.status(200).send("Added");
+        return;
       }
-      db.getState().schedules[i].courseName.push(course);
-      db.getState().schedules[i].subject.push(subject);
-      db.update("Schedule").write();
-      res.status(200).send("Added");
-      return;
     }
+    res.status(404).send("ERROR not added");
+  } else {
+    res.json({ message: "failed" });
   }
-  res.status(404).send("ERROR not added");
 });
 
 //Task 6
-router.get("/display/schedule/:name", (req, res) => {
-  let name = req.sanitize(req.params.name);
-  console.log(name);
-  let dispSchedule = [];
-  for (let i = 0; i < db.getState().schedules.length; i++) {
-    if (db.getState().schedules[i].scheduleName === name) {
-      for (let j = 0; j < db.getState().schedules[i].courseName.length; j++) {
-        let dispsubject = db.getState().schedules[i].subject[j];
-        let dispCourse = db.getState().schedules[i].courseName[j];
-        const course = data.filter(
-          (a) =>
-            a.subject.toString().toLowerCase() ===
-            req.sanitize(dispsubject.toString().toLowerCase())
-        );
-        const final = course.filter(
-          (a) =>
-            a.catalog_nbr.toString().toUpperCase() ===
-            req.sanitize(dispCourse.toString().toUpperCase())
-        );
-        dispSchedule.push(final);
+router.get("/display/schedule/:name/:auth_token", (req, res) => {
+  const token = req.sanitize(req.params.auth_token);
+  const jsonToken = JSON.parse(token);
+  if (authenticateJWT(jsonToken) == 101) {
+    let name = req.sanitize(req.params.name);
+    console.log(name);
+    let dispSchedule = [];
+    for (let i = 0; i < db.getState().schedules.length; i++) {
+      if (db.getState().schedules[i].scheduleName === name) {
+        for (let j = 0; j < db.getState().schedules[i].courseName.length; j++) {
+          let dispsubject = db.getState().schedules[i].subject[j];
+          let dispCourse = db.getState().schedules[i].courseName[j];
+          const course = data.filter(
+            (a) =>
+              a.subject.toString().toLowerCase() ===
+              req.sanitize(dispsubject.toString().toLowerCase())
+          );
+          const final = course.filter(
+            (a) =>
+              a.catalog_nbr.toString().toUpperCase() ===
+              req.sanitize(dispCourse.toString().toUpperCase())
+          );
+          dispSchedule.push(final);
+        }
+        res.send(JSON.stringify(dispSchedule));
+        return;
       }
-      res.send(JSON.stringify(dispSchedule));
-      return;
     }
+    res.status(404).send("Schedule not found");
+  } else {
+    res.json({ message: "failed" });
   }
-  res.status(404).send("Schedule not found");
 });
 
 //Task 7
-router.post("/schedule/:name", (req, res) => {
-  let sName = req.sanitize(req.params.name);
-  console.log(sName);
-  for (let i = 0; i < db.getState().schedules.length; i++) {
-    if (db.getState().schedules[i].scheduleName === sName) {
-      db.get("schedules").remove({ scheduleName: sName }).write();
-      res.status(200).send("Schedule has been removed.");
+router.post("/schedule/:name/:auth_token", (req, res) => {
+  const token = req.sanitize(req.params.auth_token);
+  const jsonToken = JSON.parse(token);
+  if (authenticateJWT(jsonToken) == 101) {
+    let sName = req.sanitize(req.params.name);
+    console.log(sName);
+    for (let i = 0; i < db.getState().schedules.length; i++) {
+      if (db.getState().schedules[i].scheduleName === sName) {
+        db.get("schedules").remove({ scheduleName: sName }).write();
+        res.status(200).send("Schedule has been removed.");
+      }
     }
+    res.status(404).send("Name doesn't exist");
+  } else {
+    res.json({ message: "failed" });
   }
-  res.status(404).send("Name doesn't exist");
 });
 
 //Task 8
-router.get("/disp/schedule", (req, res) => {
-  let scheduleList = [];
-  for (let i = 0; i < db.getState().schedules.length; i++) {
-    scheduleList.push(
-      `Schedule name:${
-        db.getState().schedules[i].scheduleName
-      }, Number of courses:${db.getState().schedules[i].courseName[i].length}`
-    );
+router.get("/disp/schedule/:auth_token", (req, res) => {
+  const token = req.sanitize(req.params.auth_token);
+  const jsonToken = JSON.parse(token);
+  if (authenticateJWT(jsonToken) == 101) {
+    let scheduleList = [];
+    for (let i = 0; i < db.getState().schedules.length; i++) {
+      scheduleList.push(
+        `Schedule name:${
+          db.getState().schedules[i].scheduleName
+        }, Number of courses:${db.getState().schedules[i].courseName[i].length}`
+      );
+    }
+    res.send(scheduleList);
+  } else {
+    res.json({ message: "failed" });
   }
-  res.send(scheduleList);
 });
 
 //Task9
-router.post("/delete/schedules", (req, res) => {
-  for (let i = 0; i < db.getState().schedules.length; i++) {
-    db.set("schedules", []).write();
-    res.send("done");
+router.post("/delete/schedules/:auth_token", (req, res) => {
+  const token = req.sanitize(req.params.auth_token);
+  const jsonToken = JSON.parse(token);
+  if (authenticateJWT(jsonToken) == 101) {
+    for (let i = 0; i < db.getState().schedules.length; i++) {
+      db.set("schedules", []).write();
+      res.send("done");
+    }
+  } else {
+    res.json({ message: "failed" });
   }
 });
 
@@ -418,7 +448,7 @@ router.get("/keyword/:keyword", (req, res) => {
 });
 
 router.post("/change/:email/:password/:auth_token", (req, res) => {
-  console.log("poopoo")
+  console.log("poopoo");
   const token = req.sanitize(req.params.auth_token);
   const jsonToken = JSON.parse(token);
   if (authenticateJWT(jsonToken) == 101) {
@@ -428,8 +458,13 @@ router.post("/change/:email/:password/:auth_token", (req, res) => {
     let newpassword = body.password;
     for (let i = 0; i < dbUser.getState().users.length; i++) {
       if (dbUser.getState().users[i].emailLink === email) {
-        if (bcrypt.compareSync(password, dbUser.getState().users[i].passwordKey)) {
-          dbUser.getState().users[i].passwordKey = bcrypt.hashSync(newpassword, saltRounds);;
+        if (
+          bcrypt.compareSync(password, dbUser.getState().users[i].passwordKey)
+        ) {
+          dbUser.getState().users[i].passwordKey = bcrypt.hashSync(
+            newpassword,
+            saltRounds
+          );
           dbUser.update("Users").write();
           return;
         }
