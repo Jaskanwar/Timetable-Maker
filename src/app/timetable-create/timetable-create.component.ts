@@ -15,6 +15,7 @@ import {
 })
 export class TimetableCreateComponent implements OnInit {
   name = '';
+  description = '';
   subject = '';
   email = '';
   password = '';
@@ -40,6 +41,10 @@ export class TimetableCreateComponent implements OnInit {
     let authObject = {
       headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
     };
+    if(this.name ==""){
+      document.getElementById('sDisplay').textContent = "Please Enter a name";
+      return;
+    }
     this.config
       .putScheduleName(this.name, JSON.stringify(authObject), this.info)
       .subscribe((res: any) => {
@@ -49,6 +54,17 @@ export class TimetableCreateComponent implements OnInit {
           this.router.navigate(['']);
         }
       });
+  }
+  addDescription(){
+    let authObject = {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
+    };
+    this.config.putDescription(this.name,JSON.stringify(authObject),{"description": this.description}).subscribe((res: any)=>{
+      let temp = JSON.parse(res);
+      if (temp.message == 'failed') {
+        this.router.navigate(['']);
+      }
+    })
   }
   addCourses(courseCode: string) {
     let authObject = {

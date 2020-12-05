@@ -1,9 +1,19 @@
 <p>CREATE TIMETABLE</p>
 <div>
-  <input [(ngModel)] = "email" type = "email" id="Email" placeholder="EMAIL">
-  <input [(ngModel)] = "password" type = "password" id="password" placeholder="PASSWORD">
-  <input [(ngModel)] = "newpassword" type = "password" id="newpassword" placeholder="NEW PASSWORD">
-  <button (click) = "changePassword()">CHANGE PASSWORD</button>
+  <input [(ngModel)]="email" type="email" id="Email" placeholder="EMAIL" />
+  <input
+    [(ngModel)]="password"
+    type="password"
+    id="password"
+    placeholder="PASSWORD"
+  />
+  <input
+    [(ngModel)]="newpassword"
+    type="password"
+    id="newpassword"
+    placeholder="NEW PASSWORD"
+  />
+  <button (click)="changePassword()">CHANGE PASSWORD</button>
 </div>
 
 <div>
@@ -14,6 +24,15 @@
     placeholder="SCHEDULE NAME"
   />
   <button (click)="nameSched()">SUBMIT</button>
+</div>
+<div>
+  <input
+    [(ngModel)]="description"
+    type="text"
+    id="description"
+    placeholder="ADD OPTIONAL DESCRIPTION"
+  />
+  <button (click)="addDescription()">SUBMIT</button>
 </div>
 <div>
   <input
@@ -43,6 +62,4 @@
   <button (click)="deleteAllSchedules()">DELETE ALL SCHEDULES</button>
 </div>
 
-<div id="sDisplay">
-
-</div>
+<div id="sDisplay"></div>

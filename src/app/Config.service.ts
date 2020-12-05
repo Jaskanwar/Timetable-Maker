@@ -93,4 +93,7 @@ export class ConfigService {
   postNewPassword(email: string, password: string, auth: string, info: object){
     return this.post('api/change/'+email+'/'+password+'/'+auth,info,{responseType: 'text'});
   }
+  putDescription(name: string,auth: string, info: object){
+    return this.put('api/description/'+name+'/'+auth,info, {responseType: 'text'});
+  }
 }

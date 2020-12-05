@@ -212,9 +212,12 @@ router.put("/schedule/:name/:auth_token", (req, res) => {
     db.get("schedules")
       .push({
         scheduleName: name,
+        description: [],
         subject: [],
         courseName: [],
         user: decode.emailAddress,
+        flag: "private",
+        modified: Math.floor(Date.now()/1000)
       })
       .write();
     res.status(200).send();
@@ -474,6 +477,26 @@ router.post("/change/:email/:password/:auth_token", (req, res) => {
     res.json({ message: "failed" });
   }
 });
+
+router.put('/description/:name/:auth_token', (req, res) =>{
+  console.log("poopoo")
+  const token = req.sanitize(req.params.auth_token);
+  const jsonToken = JSON.parse(token);
+  if (authenticateJWT(jsonToken) == 101){
+    const body = req.body;
+    let desscription = JSON.parse(`"${req.sanitize(body.description)}"`);
+    let name = req.sanitize(req.params.name);
+    for (let i = 0; i < db.getState().schedules.length; i++) {
+      if (db.getState().schedules[i].scheduleName === name) {
+          db.getState().schedules[i].description = desscription;
+          db.getState().schedules[i].modified = Math.floor(Date.now() / 1000);
+          db.update('schedules').write();
+          res.status(200).send("added")
+          return;
+      }
+  }
+  }
+})
 
 app.listen(port, () => {
   console.log("Listening on port" + port);
