@@ -96,4 +96,7 @@ export class ConfigService {
   putDescription(name: string,auth: string, info: object){
     return this.put('api/description/'+name+'/'+auth,info, {responseType: 'text'});
   }
+  postPublic(name: string,auth: string, info: object){
+    return this.post('api/public/'+name+'/'+auth,info,{responseType: 'text'});
+  }
 }

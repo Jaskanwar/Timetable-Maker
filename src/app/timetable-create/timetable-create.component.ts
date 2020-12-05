@@ -157,4 +157,15 @@ export class TimetableCreateComponent implements OnInit {
         }
       });
   }
+  makePublic(){
+    let authObject = {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
+    };
+    this.config.postPublic(this.name, JSON.stringify(authObject),this.info).subscribe((res:any) =>{
+      let temp = JSON.parse(res);
+        if (temp.message == 'failed') {
+          this.router.navigate(['']);
+        }
+    })
+  }
 }
