@@ -1,3 +1,19 @@
 {
-  "schedules": []
+  "schedules": [
+    {
+      "scheduleName": "Test",
+      "description": [],
+      "subject": [
+        "applmath",
+        "applmath"
+      ],
+      "courseName": [
+        "1201B",
+        "1411B"
+      ],
+      "user": "test@gmail.com",
+      "flag": "public",
+      "modified": 1607152799
+    }
+  ]
 }

@@ -49,4 +49,9 @@ export class TimetableHomeComponent implements OnInit {
         }
       });
   }
+  displayPublic(){
+    this.config.getPublic().subscribe((res: any)=> {
+      document.getElementById("mandem").textContent = res
+    })
+  }
 }

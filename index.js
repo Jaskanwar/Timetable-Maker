@@ -536,6 +536,16 @@ router.get("/show/:auth_token", (req, res) => {
   }
 });
 
+router.get('/show/list/public',(req, res) =>{
+  let list = []
+  for(let i =0; i< db.getState().schedules.length; i++){
+    if(db.getState().schedules[i].flag === "public"){
+      list.push("User: " + db.getState().schedules[i].user + " Name: "+ db.getState().schedules[i].scheduleName + " Courses: " + db.getState().schedules[i].courseName.length);
+    }
+  }
+  res.send(list);
+})
+
 app.listen(port, () => {
   console.log("Listening on port" + port);
 });

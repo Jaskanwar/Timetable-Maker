@@ -102,4 +102,7 @@ export class ConfigService {
   getLists(auth: string){
     return this.get('api/show/'+auth);
   }
+  getPublic(){
+    return this.get('api/show/list/public');
+  }
 }
