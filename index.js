@@ -495,7 +495,7 @@ router.put("/description/:name/:auth_token", (req, res) => {
         return;
       }
     }
-  }else {
+  } else {
     res.json({ message: "failed" });
   }
 });
@@ -514,7 +514,24 @@ router.post("/public/:name/:auth_token", (req, res) => {
         return;
       }
     }
-  }else {
+  } else {
+    res.json({ message: "failed" });
+  }
+});
+
+router.get("/show/:auth_token", (req, res) => {
+  const token = req.sanitize(req.params.auth_token);
+  const jsonToken = JSON.parse(token);
+  let decode = jwt_decode(token);
+  if (authenticateJWT(jsonToken) == 101) {
+    let list = [];
+    for (let i = 0; i < db.getState().schedules.length; i++) {
+      if (decode.emailAddress == db.getState().schedules[i].user) {
+        list.push(db.getState().schedules[i].scheduleName);
+      }
+    }
+    res.send(list);
+  } else {
     res.json({ message: "failed" });
   }
 });

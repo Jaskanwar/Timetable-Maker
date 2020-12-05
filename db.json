@@ -1,13 +1,3 @@
 {
-  "schedules": [
-    {
-      "scheduleName": "test",
-      "description": "hello",
-      "subject": [],
-      "courseName": [],
-      "user": "test@gmail.com",
-      "flag": "public",
-      "modified": 1607144762
-    }
-  ]
+  "schedules": []
 }

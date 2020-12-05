@@ -21,6 +21,7 @@ export class TimetableCreateComponent implements OnInit {
   password = '';
   newpassword = '';
   arr;
+  lists;
   info = {};
   httpOptions = {
     headers: new HttpHeaders({
@@ -41,8 +42,8 @@ export class TimetableCreateComponent implements OnInit {
     let authObject = {
       headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
     };
-    if(this.name ==""){
-      document.getElementById('sDisplay').textContent = "Please Enter a name";
+    if (this.name == '') {
+      document.getElementById('sDisplay').textContent = 'Please Enter a name';
       return;
     }
     this.config
@@ -55,16 +56,20 @@ export class TimetableCreateComponent implements OnInit {
         }
       });
   }
-  addDescription(){
+  addDescription() {
     let authObject = {
       headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
     };
-    this.config.putDescription(this.name,JSON.stringify(authObject),{"description": this.description}).subscribe((res: any)=>{
-      let temp = JSON.parse(res);
-      if (temp.message == 'failed') {
-        this.router.navigate(['']);
-      }
-    })
+    this.config
+      .putDescription(this.name, JSON.stringify(authObject), {
+        description: this.description,
+      })
+      .subscribe((res: any) => {
+        let temp = JSON.parse(res);
+        if (temp.message == 'failed') {
+          this.router.navigate(['']);
+        }
+      });
   }
   addCourses(courseCode: string) {
     let authObject = {
@@ -100,19 +105,23 @@ export class TimetableCreateComponent implements OnInit {
         }
       });
   }
-  deleteSchedName() {
+  deleteSchedName(name: string) {
     let authObject = {
       headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
     };
-    this.config
-      .deleteName(this.name, JSON.stringify(authObject), this.info)
-      .subscribe((res: any) => {
-        console.log(res);
-        let temp = JSON.parse(res);
-        if (temp.message == 'failed') {
-          this.router.navigate(['']);
-        }
-      });
+    if (window.confirm('Are you sure you want to delete?')) {
+      this.config
+        .deleteName(name, JSON.stringify(authObject), this.info)
+        .subscribe((res: any) => {
+          console.log(res);
+          let temp = JSON.parse(res);
+          if (temp.message == 'failed') {
+            this.router.navigate(['']);
+          }
+        });
+    } else {
+      document.getElementById('sDisplay').textContent = "Delete Cancelled"
+    }
   }
   displayAllSchedule() {
     let authObject = {
@@ -157,15 +166,29 @@ export class TimetableCreateComponent implements OnInit {
         }
       });
   }
-  makePublic(){
+  makePublic() {
     let authObject = {
       headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
     };
-    this.config.postPublic(this.name, JSON.stringify(authObject),this.info).subscribe((res:any) =>{
-      let temp = JSON.parse(res);
+    this.config
+      .postPublic(this.name, JSON.stringify(authObject), this.info)
+      .subscribe((res: any) => {
+        let temp = JSON.parse(res);
         if (temp.message == 'failed') {
           this.router.navigate(['']);
         }
-    })
+      });
+  }
+  populateList() {
+    let authObject = {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('jwt') },
+    };
+    this.config.getLists(JSON.stringify(authObject)).subscribe((res: any) => {
+      this.lists = res;
+      let temp = JSON.parse(res);
+      if (temp.message == 'failed') {
+        this.router.navigate(['']);
+      }
+    });
   }
 }

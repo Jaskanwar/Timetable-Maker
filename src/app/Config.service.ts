@@ -99,4 +99,7 @@ export class ConfigService {
   postPublic(name: string,auth: string, info: object){
     return this.post('api/public/'+name+'/'+auth,info,{responseType: 'text'});
   }
+  getLists(auth: string){
+    return this.get('api/show/'+auth);
+  }
 }

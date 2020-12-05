@@ -38,7 +38,13 @@
 <div>
   <button (click)="makePublic()">MAKE PUBLIC</button>
 </div>
-
+<div>
+  <button (click) = "populateList()">Show Lists</button>
+  <select #dropdown2>
+    <option *ngFor = "let x of lists">{{x}}</option>
+  </select>
+  <button (click)="deleteSchedName(dropdown2.value)">Delete</button>
+</div>
 <div>
   <input
     [(ngModel)]="subject"
@@ -56,9 +62,6 @@
 </div>
 <div>
   <button (click)="displaySchedule()">DISPLAY SCHEDULE</button>
-</div>
-<div>
-  <button (click)="deleteSchedName()">Delete</button>
 </div>
 <div>
   <button (click)="displayAllSchedule()">DISPLAY ALL SCHEDULES</button>
