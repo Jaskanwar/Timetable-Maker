@@ -1,5 +1,6 @@
-# Se3316Jrandh4Lab5
+# Timetable Maker
 
+#Run node index.js to start server and then navigate to localhost:3000
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.1.
 
 ## Development server
